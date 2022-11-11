@@ -70,20 +70,22 @@
         app:layout_constraintTop_toBottomOf="@id/btn_delete_excel" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/dropdown_menu"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_delete_excel">
+        app:layout_constraintTop_toBottomOf="@id/btn_display_excel">
 
         <AutoCompleteTextView
-            android:id="@+id/dropdown_options"
+            android:id="@+id/dropdownExcelOptions"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Customers.xlsx"
-            android:inputType="none" />
+            android:hint="@string/select_excel"
+            android:inputType="none"
+            android:text="Customers.xlsx" />
 
     </com.google.android.material.textfield.TextInputLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
