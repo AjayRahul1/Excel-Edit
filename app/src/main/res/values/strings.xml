@@ -5,4 +5,5 @@
     <string name="insert_modify_the_excel">Insert/Modify\nthe Excel</string>
     <string name="delete_an_excel_file">Delete an Excel file</string>
     <string name="display_the_excel_file">Display the Excel File</string>
+    <string name="select_excel">Select an Excel File</string>
 </resources>
