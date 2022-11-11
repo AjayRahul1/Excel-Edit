@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Excel Edit</string>
+    <string name="welcome_to_excel_edit">Welcome to Excel Edit 📃</string>
+    <string name="create_an_excel">Create an Excel</string>
+    <string name="insert_modify_the_excel">Insert/Modify\nthe Excel</string>
+    <string name="delete_an_excel_file">Delete an Excel file</string>
+    <string name="display_the_excel_file">Display the Excel File</string>
+</resources>
