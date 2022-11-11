@@ -2,7 +2,6 @@ package com.ajayrahul1.exceledit
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.ViewGroup
 import com.ajayrahul1.exceledit.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
