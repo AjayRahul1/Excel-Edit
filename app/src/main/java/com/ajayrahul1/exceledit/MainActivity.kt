@@ -1,11 +1,14 @@
 package com.ajayrahul1.exceledit
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Context
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import android.widget.Toast.makeText
+import androidx.appcompat.app.AppCompatActivity
 import com.ajayrahul1.exceledit.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -28,7 +31,7 @@ class MainActivity : AppCompatActivity() {
             ).show()
         }
 
-        binding.btnCreateExcel.setOnClickListener{
+        binding.btnCreateExcel.setOnClickListener {
             createExcel(items)
         }
 
@@ -37,9 +40,29 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun setVisibilityOfCreateExcelInput(visibilityValue: Int) {
+        when (visibilityValue) {
+            0 -> {
+                binding.etCreateExcelInput.visibility = View.INVISIBLE
+                binding.createExcelInputOutline.visibility = View.INVISIBLE
+            }
+            else -> {
+                binding.etCreateExcelInput.visibility = View.VISIBLE
+                binding.createExcelInputOutline.visibility = View.VISIBLE
+            }
+        }
+    }
+
     private fun createExcel(items: MutableList<String>) {
-        binding.createExcelInputOutline.visibility =  View.VISIBLE
-        binding.etCreateExcelInput.visibility = View.VISIBLE
+        setVisibilityOfCreateExcelInput(1)
+        binding.etCreateExcelInput.setOnKeyListener { view, keyCode, _ ->
+            items.add(binding.etCreateExcelInput.text.toString()+".xlsx")
+            binding.etCreateExcelInput.text?.clear()
+            if (items.isNotEmpty())
+                binding.DropDownExcelFiles.setText(getString(R.string.select_another_file))
+            setItemsToDropDownMenu(items)
+            handleKeyEvent(view, keyCode)
+        }
     }
 
     private fun setItemsToDropDownMenu(items: MutableList<String>) {
@@ -55,10 +78,25 @@ class MainActivity : AppCompatActivity() {
         ).show()
         items.remove(binding.DropDownExcelFiles.text.toString())
         if (items.isEmpty())
-            binding.DropDownExcelFiles.setText("No files left")
+            binding.DropDownExcelFiles.setText(getString(R.string.no_files_remaining))
         else if (!items.contains(binding.DropDownExcelFiles.text.toString())) {
-            binding.DropDownExcelFiles.setText("Select another one")
+            binding.DropDownExcelFiles.setText(getString(R.string.select_another_file))
             setItemsToDropDownMenu(items)
         }
+    }
+
+    // Function that closes keyboard when clicked ENTER KEY
+    private fun handleKeyEvent(view: View, keyCode: Int): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_ENTER) {
+            // Hide the keyboard
+            val inputMethodManager =
+                getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+
+            // setting visibility to invisible when enter key is pressed to make it disappear
+            setVisibilityOfCreateExcelInput(0)
+            return true
+        }
+        return false
     }
 }
