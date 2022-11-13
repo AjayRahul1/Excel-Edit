@@ -6,4 +6,7 @@
     <string name="delete_an_excel_file">Delete an Excel file</string>
     <string name="display_the_excel_file">Display the Excel File</string>
     <string name="select_excel">Select an Excel File</string>
+    <string name="name_of_excel_file">Name of Excel File</string>
+    <string name="operations_with_new_excel_file">Operations with New Excel File:</string>
+    <string name="operations_with_existing_excel_file">Operations with Existing Excel File:</string>
 </resources>
