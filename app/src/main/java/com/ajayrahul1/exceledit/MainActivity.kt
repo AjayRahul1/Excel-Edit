@@ -1,6 +1,7 @@
 package com.ajayrahul1.exceledit
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
@@ -33,6 +34,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnCreateExcel.setOnClickListener {
             createExcel(items)
+        }
+
+        binding.btnModifyExcel.setOnClickListener {
+            startActivity(Intent(applicationContext, InsertUpdateExcel::class.java))
         }
 
         binding.btnDeleteExcel.setOnClickListener {

@@ -11,4 +11,5 @@
     <string name="operations_with_existing_excel_file">Operations with Existing Excel File:</string>
     <string name="no_files_remaining">No files remaining</string>
     <string name="select_another_file">Select file to Operate</string>
+    <string name="enter_the_no_of_columns">Enter the No. of Columns</string>
 </resources>
