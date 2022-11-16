@@ -12,4 +12,5 @@
     <string name="no_files_remaining">No files remaining</string>
     <string name="select_another_file">Select file to Operate</string>
     <string name="enter_the_no_of_columns">Enter the No. of Columns</string>
+    <string name="enter_column_data">Enter Column Name</string>
 </resources>
