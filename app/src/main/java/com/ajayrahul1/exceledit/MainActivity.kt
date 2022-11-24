@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import android.widget.Toast.makeText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.ajayrahul1.exceledit.databinding.ActivityMainBinding
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import java.io.File
@@ -27,6 +28,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        changeParametersOfElements()
+
         supportActionBar?.hide()    // Hides the action bar
 
         /* checkPermission("Manifest.permission.WRITE_EXTERNAL_STORAGE", STORAGE_PERMISSION_CODE)
@@ -39,9 +42,13 @@ class MainActivity : AppCompatActivity() {
         val items = mutableListOf("Customers.xlsx", "Finance.xlsx", "Components.xlsx")
         setItemsToDropDownMenu(items)
 
-        if (intent?. action == Intent.ACTION_SEND && intent.type == "text/plain") {
+        if (intent?.action == Intent.ACTION_SEND && intent.type == "text/plain") {
             val dataReceived = handleSendText(intent)
-            makeText(this, "Enter the name of the excel to create excel with Data", Toast.LENGTH_LONG).show()
+            makeText(
+                this,
+                "Enter the name of the excel to create excel with Data",
+                Toast.LENGTH_LONG
+            ).show()
             createExcel(items, dataReceived)
         }
 
@@ -53,7 +60,9 @@ class MainActivity : AppCompatActivity() {
             ).show()
         }
 
-        binding.btnCreateExcel.setOnClickListener { createExcel(items, dataReceived = "") }
+        binding.btnCreateExcel.setOnClickListener {
+            createExcel(items, dataReceived = "")
+        }
 
         binding.btnModifyExcel.setOnClickListener {
             startActivity(Intent(applicationContext, InsertUpdateExcel::class.java))
@@ -67,10 +76,13 @@ class MainActivity : AppCompatActivity() {
     private fun handleSendText(intent: Intent) = intent.getStringExtra(Intent.EXTRA_TEXT).toString()
 
     private fun knowAboutUs() {
-        if (binding.txtClickableKnowAbtUs.text == getString(R.string.txt_clickable_know_about_us))
+        if (binding.txtClickableKnowAbtUs.text == getString(R.string.txt_clickable_know_about_us)) {
             binding.txtClickableKnowAbtUs.text = getString(R.string.know_about_us_desc)
-        else
+            binding.txtClickableKnowAbtUs.setCompoundDrawables(null, null, null, null)
+        } else {
             binding.txtClickableKnowAbtUs.text = getString(R.string.txt_clickable_know_about_us)
+            binding.txtClickableKnowAbtUs.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_people, 0, R.drawable.ic_people, 0)
+        }
     }
 
     /* // Function to check and request permission.
@@ -87,24 +99,28 @@ class MainActivity : AppCompatActivity() {
                 .show()
         }
     }*/
+    // Commented it because permission not required
 
-    private fun setVisibilityOfCreateExcelInput(visibilityValue: Int) {
-        when (visibilityValue) {
+
+    private fun setVisibilityOfCreateExcelInput(visibilityValue: Int): Boolean {
+        return when (visibilityValue) {
             0 -> {
                 binding.etCreateExcelInput.visibility = View.INVISIBLE
                 binding.createExcelInputOutline.visibility = View.INVISIBLE
+                false
             }
             else -> {
                 binding.etCreateExcelInput.visibility = View.VISIBLE
                 binding.createExcelInputOutline.visibility = View.VISIBLE
+                true
             }
         }
     }
 
-    private fun createExcel(items: MutableList<String>, dataReceived : String) {
+    private fun createExcel(items: MutableList<String>, dataReceived: String) {
         setVisibilityOfCreateExcelInput(1)
+        changeParametersOfElements()
         binding.etCreateExcelInput.setOnKeyListener { view, keyCode, _ ->
-
             val directory =
                 File("${Environment.getExternalStorageDirectory()}/Documents/Excel Edit")
             if (!directory.exists())
@@ -116,8 +132,8 @@ class MainActivity : AppCompatActivity() {
             // Creating an Excel File Workbook
             val newWorkbookExcel = HSSFWorkbook()
 
-             // Creating a sheet inside Workbook
-            val excelSheet = newWorkbookExcel.createSheet(dataReceived)
+            // Creating a sheet inside Workbook
+            val excelSheet = newWorkbookExcel.createSheet("Sheet 1")
 
             // Set the row to edit
             val excelRowEditing = excelSheet.createRow(0)
@@ -212,10 +228,33 @@ class MainActivity : AppCompatActivity() {
                 getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
 
+
             // setting visibility to invisible when enter key is pressed to make it disappear
-            setVisibilityOfCreateExcelInput(0)  // created method not built-in
+            setVisibilityOfCreateExcelInput(0) // created method not built-in
+
+            changeParametersOfElements()
             return true
         }
         return false
+    }
+
+    private fun changeParametersOfElements() {
+        val params = binding.txtExistingExcel.layoutParams as ConstraintLayout.LayoutParams
+        if (binding.etCreateExcelInput.visibility == View.INVISIBLE &&
+            binding.createExcelInputOutline.visibility == View.INVISIBLE
+        ) {
+
+            params.startToStart = binding.btnCreateExcel.id
+            params.topToBottom = binding.btnCreateExcel.id
+
+        }
+        if (binding.etCreateExcelInput.visibility == View.VISIBLE &&
+            binding.createExcelInputOutline.visibility == View.VISIBLE
+        ) {
+
+            params.startToStart = binding.btnCreateExcel.id
+            params.topToBottom = binding.createExcelInputOutline.id
+        }
+        binding.txtExistingExcel.requestLayout()
     }
 }
