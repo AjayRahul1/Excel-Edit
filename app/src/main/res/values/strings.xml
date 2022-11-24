@@ -14,8 +14,8 @@
     <string name="no_of_columns">No. of Columns</string>
     <string name="enter_column_data">Enter Column Name</string>
     <string name="no_of_rows">No. of Rows</string>
-    <string name="txt_clickable_know_about_us">Click here to know \"About Us\"</string>
-    <string name="know_about_us_desc">This app is created by:\n
+    <string name="txt_clickable_know_about_us">\"About Us\"</string>
+    <string name="know_about_us_desc"><u>This application is developed by:\n</u>
         1. P.Ajay Rahul Prasad (20131A05K4)\n
         2. Shaik Shaarikh (20131A05N1)\n
         Thank you for creating this wonderful opportunity for us.\n
