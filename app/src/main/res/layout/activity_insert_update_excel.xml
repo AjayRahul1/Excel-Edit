@@ -14,6 +14,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/input_no_of_rows"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -22,7 +23,26 @@
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/ic_column"
             android:drawablePadding="8dp"
-            android:hint="@string/enter_the_no_of_columns"
+            android:hint="@string/no_of_columns"
+            android:inputType="number" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/input_no_of_rows"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/input_no_of_columns"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/no_of_rows_count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_rows"
+            android:drawablePadding="8dp"
+            android:hint="@string/no_of_rows"
             android:inputType="number" />
     </com.google.android.material.textfield.TextInputLayout>
 
