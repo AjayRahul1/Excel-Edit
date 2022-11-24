@@ -1,6 +1,5 @@
 package com.ajayrahul1.exceledit
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
@@ -19,7 +18,7 @@ import java.io.FileOutputStream
 
 class MainActivity : AppCompatActivity() {
     /*companion object {
-        private const val STORAGE_PERMISSION_CODE = 101
+        const val dataReceived = "Sample"
     }*/
 
     private lateinit var binding: ActivityMainBinding
@@ -40,6 +39,13 @@ class MainActivity : AppCompatActivity() {
         val items = mutableListOf("Customers.xlsx", "Finance.xlsx", "Components.xlsx")
         setItemsToDropDownMenu(items)
 
+        if (intent?. action == Intent.ACTION_SEND && intent.type == "text/plain") {
+            val dataReceived = handleSendText(intent)
+            binding.txtExistingExcel.text = intent.data.toString()
+            makeText(this, "Enter the name of the excel to create excel with Data", Toast.LENGTH_LONG).show()
+            createExcel(items, dataReceived)
+        }
+
         binding.DropDownExcelFiles.setOnItemClickListener { parent, _, position, _ ->
             makeText(
                 applicationContext,
@@ -48,22 +54,18 @@ class MainActivity : AppCompatActivity() {
             ).show()
         }
 
-        binding.btnCreateExcel.setOnClickListener {
-            createExcel(items)
-        }
+        binding.btnCreateExcel.setOnClickListener { createExcel(items, dataReceived = "") }
 
         binding.btnModifyExcel.setOnClickListener {
             startActivity(Intent(applicationContext, InsertUpdateExcel::class.java))
         }
 
-        binding.btnDeleteExcel.setOnClickListener {
-            deleteExcel(items)
-        }
+        binding.btnDeleteExcel.setOnClickListener { deleteExcel(items) }
 
-        binding.txtClickableKnowAbtUs.setOnClickListener {
-            knowAboutUs()
-        }
+        binding.txtClickableKnowAbtUs.setOnClickListener { knowAboutUs() }
     }
+
+    private fun handleSendText(intent: Intent) = intent.getStringExtra(Intent.EXTRA_TEXT).toString()
 
     private fun knowAboutUs() {
         if (binding.txtClickableKnowAbtUs.text == getString(R.string.txt_clickable_know_about_us))
@@ -100,7 +102,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun createExcel(items: MutableList<String>) {
+    private fun createExcel(items: MutableList<String>, dataReceived : String) {
         setVisibilityOfCreateExcelInput(1)
         binding.etCreateExcelInput.setOnKeyListener { view, keyCode, _ ->
 
@@ -115,8 +117,8 @@ class MainActivity : AppCompatActivity() {
             // Creating an Excel File Workbook
             val newWorkbookExcel = HSSFWorkbook()
 
-            /** // Creating a sheet inside Workbook
-            val excelSheet = newWorkbookExcel.createSheet(binding.etCreateExcelInput.text.toString())
+             // Creating a sheet inside Workbook
+            val excelSheet = newWorkbookExcel.createSheet(dataReceived)
 
             // Set the row to edit
             val excelRowEditing = excelSheet.createRow(0)
@@ -125,7 +127,7 @@ class MainActivity : AppCompatActivity() {
             val excelColumnEditing = excelRowEditing.createCell(0)
 
             // Providing the text to enter into excel
-            excelColumnEditing.setCellValue(binding.etCreateExcelInput.text.toString()) */
+            excelColumnEditing.setCellValue(dataReceived)
 
             // Setting a path where excel should be saved in storage
             val filepath =
@@ -159,6 +161,7 @@ class MainActivity : AppCompatActivity() {
             if (items.isNotEmpty())
                 binding.DropDownExcelFiles.setText(getString(R.string.select_another_file))
             setItemsToDropDownMenu(items)
+
             handleKeyEvent(view, keyCode)
         }
     }
@@ -207,7 +210,7 @@ class MainActivity : AppCompatActivity() {
         if (keyCode == KeyEvent.KEYCODE_ENTER) {
             // Hide the keyboard
             val inputMethodManager =
-                getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
 
             // setting visibility to invisible when enter key is pressed to make it disappear
