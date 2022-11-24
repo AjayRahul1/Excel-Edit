@@ -41,7 +41,6 @@ class MainActivity : AppCompatActivity() {
 
         if (intent?. action == Intent.ACTION_SEND && intent.type == "text/plain") {
             val dataReceived = handleSendText(intent)
-            binding.txtExistingExcel.text = intent.data.toString()
             makeText(this, "Enter the name of the excel to create excel with Data", Toast.LENGTH_LONG).show()
             createExcel(items, dataReceived)
         }
