@@ -1,6 +1,9 @@
 package com.ajayrahul1.exceledit
 
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
+import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
@@ -12,6 +15,7 @@ import android.widget.Toast
 import android.widget.Toast.makeText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.ActivityCompat
 import com.ajayrahul1.exceledit.databinding.ActivityMainBinding
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import java.io.File
@@ -28,6 +32,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE),
+            PackageManager.PERMISSION_GRANTED
+        )
         changeParametersOfElements()
 
         supportActionBar?.hide()    // Hides the action bar
@@ -39,7 +48,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, InsertUpdateExcel::class.java))
         }
 
-        val items = mutableListOf("Customers.xlsx", "Finance.xlsx", "Components.xlsx")
+        val items = mutableListOf<String>()
         setItemsToDropDownMenu(items)
 
         if (intent?.action == Intent.ACTION_SEND && intent.type == "text/plain") {
@@ -81,7 +90,12 @@ class MainActivity : AppCompatActivity() {
             binding.txtClickableKnowAbtUs.setCompoundDrawables(null, null, null, null)
         } else {
             binding.txtClickableKnowAbtUs.text = getString(R.string.txt_clickable_know_about_us)
-            binding.txtClickableKnowAbtUs.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_people, 0, R.drawable.ic_people, 0)
+            binding.txtClickableKnowAbtUs.setCompoundDrawablesWithIntrinsicBounds(
+                R.drawable.ic_info,
+                0,
+                0,
+                0
+            )
         }
     }
 
@@ -199,18 +213,24 @@ class MainActivity : AppCompatActivity() {
     }*/
 
     private fun setItemsToDropDownMenu(items: MutableList<String>) {
+        if (items.isEmpty())
+            binding.DropDownExcelFiles.setText(getString(R.string.no_files_remaining))
         val adapterItems = ArrayAdapter(this, R.layout.dropdown_item, items)
         binding.DropDownExcelFiles.setAdapter(adapterItems)
     }
 
     private fun deleteExcel(items: MutableList<String>) {
-
-        File("${Environment.getExternalStorageDirectory()}/Documents/Excel Edit/${binding.DropDownExcelFiles.text}.xlsx").delete()
-        makeText(
-            applicationContext,
-            "${binding.DropDownExcelFiles.text} file deleted",
-            Toast.LENGTH_SHORT
-        ).show()
+        val fileToDelete =
+            File("${Environment.getExternalStorageDirectory()}/Documents/Excel Edit/${binding.DropDownExcelFiles.text}").delete()
+        try {
+            if (fileToDelete) {
+                Log.e("Deletion of Excel", "File Deleted")
+                makeText(this, "${binding.DropDownExcelFiles.text} deleted 🎉",Toast.LENGTH_SHORT).show()
+            } else Log.e("Deletion Of Excel", "Deletion unsuccessful")
+        } catch (e: Exception) {
+            e.printStackTrace()
+            makeText(this, "${binding.DropDownExcelFiles.text} deletion unsuccessful",Toast.LENGTH_SHORT).show()
+        }
         items.remove(binding.DropDownExcelFiles.text.toString())
         if (items.isEmpty())
             binding.DropDownExcelFiles.setText(getString(R.string.no_files_remaining))
@@ -218,6 +238,7 @@ class MainActivity : AppCompatActivity() {
             binding.DropDownExcelFiles.setText(getString(R.string.select_another_file))
             setItemsToDropDownMenu(items)
         }
+
     }
 
     // Function that closes keyboard when clicked ENTER KEY
