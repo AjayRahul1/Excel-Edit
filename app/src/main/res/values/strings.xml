@@ -18,10 +18,15 @@
     <string name="know_about_us_desc">
         This app will be able to create excel files for you and fill the data for you with just a tap
         on the share button of any other application.\n\n
+        ---How to send data from another application?---\n
         • Just choose any text\n
         • Tap Share\n
         • Select this application\n
         • Enter the name of the excel.\n
-        • Check the documents folder in your file manager.
+        • Check the Excel Edit folder in Documents folder in your file manager.\n\n
+
+        ---How to delete a file?---\n
+        • Select the file from the drop down menu list.\n
+        • Click Delete Excel button
     </string>
 </resources>
